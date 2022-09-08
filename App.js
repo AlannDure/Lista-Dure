@@ -1,24 +1,11 @@
 import React, { useState} from 'react'
 import { StyleSheet, Text, View, TextInput, Button, FlatList, TouchableOpacity, Modal } from 'react-native';
+import { CustomModal, AddTask } from './components/index';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f4f5fa',
-  },
-  inputContainer: {
-    marginTop: 50,
-    marginBottom: 20,
-    marginHorizontal: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  input: {
-    width: '75%',
-    borderBottomColor: '#4A306D',
-    borderBottomWidth: 1,
-    height: 40,
-    color: '#212121',
   },
   itemList: {
     flex: 1,
@@ -138,20 +125,14 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput 
-          placeholder='new task'
-          style={styles.input}
-          selectionColor='#4A306D'
-          placeholderTextColor='#4A306D' 
-          onChangeText={onHandleChangeText}
-          value={task}
-        />
-        <Button
-         title='Add ➕' 
-         onPress={addItem} 
-         color='#4A306D'/>
-      </View>
+
+      <AddTask
+        item={task}
+        onChangeText={onHandleChangeText}
+        placeholder={'task...'}
+        onPressButton={addItem}
+      />
+
       <FlatList
         style={styles.itemList}
         data={tasks}
@@ -159,7 +140,11 @@ export default function App() {
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
       />
-      <Modal animationType='slide' visible={modalVisible}>
+
+{/*       <DeleteTask>
+
+      </DeleteTask> */}
+      <CustomModal animationType='slide' visible={modalVisible}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Entry:</Text>
         </View>
@@ -181,7 +166,7 @@ export default function App() {
             color='#cccccc'
           />
         </View>
-      </Modal>
+      </CustomModal>
     </View>
   );
 }
