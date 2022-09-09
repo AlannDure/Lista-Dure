@@ -1,6 +1,5 @@
 import React from 'react';
 import { Modal } from 'react-native';
-import { styles } from "./styles";
 
 const CustomModal = ({children, visible, animationType, onRequestClose}) => {
     return (

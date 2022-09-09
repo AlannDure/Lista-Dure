@@ -1,45 +1,11 @@
 import React, { useState} from 'react'
-import { StyleSheet, Text, View, TextInput, Button, FlatList, TouchableOpacity, Modal } from 'react-native';
-import { CustomModal, AddTask } from './components/index';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { CustomModal, AddTask, TaskList } from './components/index';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f4f5fa',
-  },
-  itemList: {
-    flex: 1,
-    marginVertical: 20,
-    marginHorizontal: 20,
-  },
-  itemContainer: {
-    flex: 1,
-    marginVertical: 5,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-    backgroundColor: '#9F84BD',
-    paddingHorizontal: 10,
-    paddingVertical: 20,
-    borderRadius: 5,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  item: {
-    fontSize: 16,
-    color: '#000000',
-  },
-  delete: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#ffffff'
   },
   modalContainer: {
     justifyContent: 'center',
@@ -68,11 +34,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginHorizontal: 20,
   },
-  buttonTouch: {
-    backgroundColor: '#4A306D',
-    padding: 10,
-    borderRadius: 10,
-  }
 });
 
 
@@ -81,6 +42,11 @@ export default function App() {
   const [tasks, setTasks] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+
+  {/* in progress */}
+  const [searc, setSearch] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
+  {/* in progress */}
 
   const onHandleChangeText = (text) => {
     setTask(text);
@@ -106,16 +72,6 @@ export default function App() {
     setSelectedTask(tasks.find((item) => item.id === id))
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <Text style={styles.item}>{item.value}</Text>
-      <TouchableOpacity style={styles.buttonTouch} onPress={() => onHandleModal(item.id)}>
-        <Text style={styles.delete}>❌</Text>
-      </TouchableOpacity>
-    </View>
-  
-  );
-  
 
   const onHandleDeleteItem = (id) => {
     setTasks(tasks.filter((item) => item.id !== id));
@@ -123,27 +79,38 @@ export default function App() {
     setModalVisible(!modalVisible);
   };
 
+
+  {/* in progress */}
+  const handleEditTask = (id, value) => {
+    //console.warn(id)
+    //console.warn(value)
+
+    const index = tasks.findIndex((task) => task.id === id);
+    if (index >= 0) {
+      const taskList = tasks.map((task) => ({ ...task }));
+      taskList[index].value = value;
+      setTasks(taskList);
+    }
+  };
+  {/* in progress */}
+
   return (
     <View style={styles.container}>
 
       <AddTask
         item={task}
         onChangeText={onHandleChangeText}
-        placeholder={'task...'}
+        placeholder={'Task here...'}
         onPressButton={addItem}
       />
-
-      <FlatList
-        style={styles.itemList}
+ 
+      <TaskList
         data={tasks}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        onPressButton={onHandleModal}
         showsVerticalScrollIndicator={false}
       />
+       
 
-{/*       <DeleteTask>
-
-      </DeleteTask> */}
       <CustomModal animationType='slide' visible={modalVisible}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Entry:</Text>
