@@ -134,6 +134,7 @@ export default function App() {
           />
         </View>
       </CustomModal>
+      
     </View>
   );
 }
